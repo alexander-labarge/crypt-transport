@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+# npm run start-with-ip --ip=your.backend.ip.address:5005
+npm run start-with-ip --ip=159.89.36.194:5005
+
+# python fileupload.py --ip <custom_ip_address> [--debug]
+python fileupload.py --ip 159.89.36.194 --debug

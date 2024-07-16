@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 # Parse command line arguments
 parser = argparse.ArgumentParser(description="File Upload Server")
 parser.add_argument('--debug', action='store_true', help="Enable debug mode")
+parser.add_argument('--ip', type=str, default='0.0.0.0', help="IP address to run the server on")
 args = parser.parse_args()
 
 # Initialize Flask app
@@ -168,4 +169,4 @@ def generate_keys():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5005, debug=args.debug)
+    app.run(host=args.ip, port=5005, debug=args.debug)

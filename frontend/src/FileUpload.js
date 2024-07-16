@@ -11,6 +11,8 @@ const FileUpload = () => {
     salt: '',
   });
 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5005';
+
   const formik = useFormik({
     initialValues: {
       file: null,
@@ -32,7 +34,7 @@ const FileUpload = () => {
       destinationPath: '',
     },
     onSubmit: (values) => {
-      console.log('Submitting form with values:', values); // Debugging line
+      console.log('Submitting form with values:', values);
 
       const formData = new FormData();
       for (let key in values) {
@@ -42,7 +44,7 @@ const FileUpload = () => {
       }
       formData.append('file', values.file);
 
-      axios.post('http://159.89.36.194:5005/upload', formData, {
+      axios.post(`${backendUrl}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -57,18 +59,18 @@ const FileUpload = () => {
   });
 
   useEffect(() => {
-    axios.get('http://159.89.36.194:5005/config')
+    axios.get(`${backendUrl}/config`)
       .then(response => {
-        console.log('Config data:', response.data); // Debugging line
+        console.log('Config data:', response.data);
         formik.setValues(response.data);
       })
       .catch(error => {
         console.error('Error fetching config:', error);
       });
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, [backendUrl]);
 
   const generateAesKeys = (password, cipherMode) => {
-    axios.post('http://159.89.36.194:5005/generate_keys', { password, cipher_mode: cipherMode })
+    axios.post(`${backendUrl}/generate_keys`, { password, cipher_mode: cipherMode })
       .then(response => {
         setAesGenerated({
           key: response.data.key,
