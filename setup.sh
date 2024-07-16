@@ -33,10 +33,10 @@ source venv/bin/activate
 
 # Install the required Python packages
 pip install --upgrade pip
-pip install Flask Flask-Cors
+pip install -r ../backend/requirements.txt
 
 # Navigate to the frontend and install npm packages
 cd ../frontend
-npm install
+npm install axios formik yup react-router-dom
 
 echo "Setup complete. You can now run ./run.sh to start the application."
