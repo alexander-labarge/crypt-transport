@@ -30,11 +30,11 @@ Crypt-Transport is a secure file upload server and client built with Python, Jav
 - Configuration management using JSON files.
 - AES key generation for encryption.
 - TODO: 
-- Transport Operations:
--  Qemu Interfaces
--  SSH Remote Config
--  mTLS Client and Server Config
--  Integrate existing per chunk AES logic for data transport
+  - Transport Operations:
+    - Qemu Interfaces
+    - SSH Remote Config
+    - mTLS Client and Server Config
+    - Integrate existing per chunk AES logic for data transport
 
 ## Prerequisites
 
@@ -129,23 +129,24 @@ Generates encryption keys based on the provided password and cipher mode.
 
 ```
 crypt-transport/
-│
-├── backend/
-│   ├── config/
-│   │   └── config.json
-│   ├── uploads/
-│   ├── venv/
-│   ├── fileupload.py
-│   └── requirements.txt
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   ├── README.md
-│   ├── package.json
-│   └── package-lock.json
 ├── README.md
+├── backend/
+│   ├── __pycache__/
+│   ├── fileupload.py
+│   ├── requirements.txt
+│   └── venv/
+├── config/
+│   └── config.json
+├── frontend/
+│   ├── README.md
+│   ├── node_modules/
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public/
+│   └── src/
 ├── run.sh
-└── setup.sh
+├── setup.sh
+└── uploads/
 ```
 
 ## Example Usage
