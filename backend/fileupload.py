@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 import subprocess
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 UPLOAD_FOLDER = '../uploads'
 CONFIG_FOLDER = '../config'
@@ -102,6 +102,7 @@ def generate_keys():
             output = result.stdout.strip()
             response = {}
             for line in output.split('\n'):
+                # TODO - address the iv= openssl output issue for certain modes
                 key, value = line.split('=')
                 response[key.lower().strip()] = value.strip()
 
@@ -116,4 +117,4 @@ def generate_keys():
         return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5005)
+    app.run(host='0.0.0.0', port=5005, debug=True)

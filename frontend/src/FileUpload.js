@@ -40,8 +40,31 @@ const FileUpload = () => {
     },
     validationSchema: Yup.object({
       file: Yup.mixed().required('A file is required'),
+      sshUsername: Yup.string().required('SSH Username is required'),
+      sshPassword: Yup.string().required('SSH Password is required'),
+      sshKey: Yup.string().required('SSH Key is required'),
+      sshPort: Yup.string().required('SSH Port is required'),
+      sshEndpoint: Yup.string().required('SSH Endpoint is required'),
+      clientCert: Yup.string().required('Client Certificate is required'),
+      clientKey: Yup.string().required('Client Private Key is required'),
+      serverCert: Yup.string().required('Server Certificate is required'),
+      serverKey: Yup.string().required('Server Private Key is required'),
+      serverBindIP: Yup.string().required('Server Bind IP is required'),
+      fileInfoPort: Yup.string().required('File Info Port is required'),
+      fileChunksPort: Yup.string().required('File Chunks Port is required'),
+      uploadDir: Yup.string().required('Upload Directory is required'),
+      downloadDir: Yup.string().required('Download Directory is required'),
+      compressionFormat: Yup.string().required('Compression Format is required'),
+      aesPassword: Yup.string().required('AES Password is required'),
+      aesKey: Yup.string().required('AES Key is required'),
+      aesIV: Yup.string().required('AES IV is required'),
+      aesSalt: Yup.string().required('AES Salt is required'),
+      encryptedChunkSize: Yup.string().required('Encrypted Chunk Size is required'),
+      destinationPath: Yup.string().required('Destination Path is required'),
     }),
     onSubmit: (values) => {
+      console.log('Submitting form with values:', values); // Debugging line
+
       const formData = new FormData();
       for (let key in values) {
         if (key !== 'file') {
@@ -50,7 +73,7 @@ const FileUpload = () => {
       }
       formData.append('file', values.file);
 
-      axios.post('http://127.0.0.1:5005/upload', formData, {
+      axios.post('http://159.89.36.194:5005/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -65,17 +88,18 @@ const FileUpload = () => {
   });
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5005/config')
+    axios.get('http://159.89.36.194:5005/config')
       .then(response => {
+        console.log('Config data:', response.data); // Debugging line
         formik.setValues(response.data);
       })
       .catch(error => {
         console.error('Error fetching config:', error);
       });
-  }, [formik]);
+  }, []); // Empty dependency array ensures this effect runs only once
 
   const generateAesKeys = (password, cipherMode) => {
-    axios.post('http://127.0.0.1:5005/generate_keys', { password, cipher_mode: cipherMode })
+    axios.post('http://159.89.36.194:5005/generate_keys', { password, cipher_mode: cipherMode })
       .then(response => {
         setAesGenerated({
           key: response.data.key,
