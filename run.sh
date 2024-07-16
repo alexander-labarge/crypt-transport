@@ -5,7 +5,7 @@ cd "$(dirname "$0")/backend"
 
 # Check if virtual environment exists, if not, create it
 if [ ! -d "venv" ]; then
-    pipx runpip virtualenv venv
+    python3 -m venv venv
 fi
 
 # Source the virtual environment

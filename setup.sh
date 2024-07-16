@@ -25,10 +25,8 @@ if [ -d "venv" ]; then
     rm -rf venv
 fi
 
-# Create a new virtual environment using pipx
-pipx ensurepath
-pipx install virtualenv
-pipx runpip virtualenv venv
+# Create a new virtual environment
+python3 -m venv venv
 
 # Source the virtual environment
 source venv/bin/activate
@@ -39,6 +37,6 @@ pip install Flask Flask-Cors
 
 # Navigate to the frontend and install npm packages
 cd ../frontend
-npm install axios formik yup react-router-dom react-scripts
+npm install
 
 echo "Setup complete. You can now run ./run.sh to start the application."
