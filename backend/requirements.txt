@@ -1,8 +1,15 @@
+astroid==3.2.3
 blinker==1.8.2
 click==8.1.7
+dill==0.3.8
 Flask==3.0.3
 Flask-Cors==4.0.1
+isort==5.13.2
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
+mccabe==0.7.0
+platformdirs==4.2.2
+pylint==3.2.5
+tomlkit==0.13.0
 Werkzeug==3.0.3

@@ -1,10 +1,19 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+"""File Upload Server"""
+
 import os
 import json
-from werkzeug.utils import secure_filename
 import subprocess
+import argparse
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from werkzeug.utils import secure_filename
 
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="File Upload Server")
+parser.add_argument('--debug', action='store_true', help="Enable debug mode")
+args = parser.parse_args()
+
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -15,89 +24,113 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CONFIG_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CONFIG_FOLDER'] = CONFIG_FOLDER
-config_path = os.path.join(app.config['CONFIG_FOLDER'], 'config.json')
-print("Config path:", config_path)
+CONFIG_PATH = os.path.join(app.config['CONFIG_FOLDER'], 'config.json')
+
+if args.debug:
+    print("Config path:", CONFIG_PATH)
+
 
 def read_config():
+    """Read configuration from the JSON file."""
     try:
-        with open(config_path, 'r') as config_file:
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as config_file:
             return json.load(config_file)
     except FileNotFoundError:
         return {}
+    except json.JSONDecodeError as e:
+        if args.debug:
+            print(f"Error decoding JSON from config file: {e}")
+        return {}
+
 
 def save_config(data):
+    """Save configuration to the JSON file."""
     try:
-        with open(config_path, 'w') as config_file:
+        with open(CONFIG_PATH, 'w', encoding='utf-8') as config_file:
             json.dump(data, config_file, indent=4)
-        return config_path
-    except Exception as e:
-        print(f"Error saving config file: {e}")
+        return CONFIG_PATH
+    except (IOError, TypeError) as e:
+        if args.debug:
+            print(f"Error saving config file: {e}")
         return None
 
+
 def save_file(file):
+    """Save uploaded file to the upload folder."""
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     try:
         file.save(file_path)
         return file_path
-    except Exception as e:
-        print(f"Error saving file: {e}")
+    except IOError as e:
+        if args.debug:
+            print(f"Error saving file: {e}")
         return None
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    try:
-        print("Received POST request at /upload")  # Debugging line
-        if 'file' not in request.files:
-            print("No file part in the request")  # Debugging line
-            return jsonify({'error': 'No file part'}), 400
-        
-        file = request.files['file']
-        if file.filename == '':
-            print("No selected file")  # Debugging line
-            return jsonify({'error': 'No selected file'}), 400
-        
-        if file:
-            file_path = save_file(file)
-            if not file_path:
-                print("Failed to save file")  # Debugging line
-                return jsonify({'error': 'Failed to save file'}), 500
-            
-            data = request.form.to_dict()
-            print("Form data received:", data)  # Debugging line
-            config = read_config()
-            config.update(data)
-            
-            config_path = save_config(config)
-            if not config_path:
-                print("Failed to save config file")  # Debugging line
-                return jsonify({'error': 'Failed to save config file'}), 500
-            
-            print("File uploaded and config saved successfully")  # Debugging line
-            return jsonify({'message': 'File uploaded and config saved successfully'}), 200
-    except Exception as e:
-        print(f"Unexpected error: {str(e)}")
-        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+    """Handle file upload and update configuration."""
+    if args.debug:
+        print("Received POST request at /upload")
+
+    if 'file' not in request.files:
+        if args.debug:
+            print("No file part in the request")
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        if args.debug:
+            print("No selected file")
+        return jsonify({'error': 'No selected file'}), 400
+
+    file_path = save_file(file)
+    if not file_path:
+        if args.debug:
+            print("Failed to save file")
+        return jsonify({'error': 'Failed to save file'}), 500
+
+    data = request.form.to_dict()
+    if args.debug:
+        print("Form data received:", data)
+
+    config = read_config()
+    config.update(data)
+
+    if not save_config(config):
+        if args.debug:
+            print("Failed to save config file")
+        return jsonify({'error': 'Failed to save config file'}), 500
+
+    if args.debug:
+        print("File uploaded and config saved successfully")
+    return jsonify({'message': 'File uploaded and config saved successfully'}), 200
+
 
 @app.route('/config', methods=['GET'])
 def get_config():
+    """Return the current configuration."""
     try:
         config = read_config()
         return jsonify(config), 200
-    except Exception as e:
-        print(f"Error reading config: {str(e)}")
-        return jsonify({'error': f'Error reading config: {str(e)}'}), 500
+    except (IOError, json.JSONDecodeError) as e:
+        if args.debug:
+            print(f"Error reading config: {e}")
+        return jsonify({'error': f'Error reading config: {e}'}), 500
+
 
 @app.route('/generate_keys', methods=['POST'])
 def generate_keys():
-    try:
-        password = request.json.get('password')
-        cipher_mode = request.json.get('cipher_mode')
-        if not password:
-            return jsonify({'error': 'Password is required to generate keys'}), 400
-        if not cipher_mode:
-            return jsonify({'error': 'Cipher mode is required'}), 400
+    """Generate encryption keys based on the provided password and cipher mode."""
+    password = request.json.get('password')
+    cipher_mode = request.json.get('cipher_mode')
+    if not password:
+        return jsonify({'error': 'Password is required to generate keys'}), 400
+    if not cipher_mode:
+        return jsonify({'error': 'Cipher mode is required'}), 400
 
+    try:
         if cipher_mode == 'aes-256-xts':
             key_size = 64  # 512 bits
             result = subprocess.run(
@@ -125,11 +158,14 @@ def generate_keys():
 
         return jsonify(response), 200
     except subprocess.CalledProcessError as e:
-        print(f"Subprocess error: {str(e)}")
+        if args.debug:
+            print(f"Subprocess error: {e}")
         return jsonify({'error': str(e)}), 500
     except Exception as e:
-        print(f"Unexpected error: {str(e)}")
-        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
+        if args.debug:
+            print(f"Unexpected error: {e}")
+        return jsonify({'error': f'Unexpected error: {e}'}), 500
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5005, debug=True)
+    app.run(host='0.0.0.0', port=5005, debug=args.debug)
