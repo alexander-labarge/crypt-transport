@@ -3,6 +3,11 @@
 # Navigate to the backend directory
 cd "$(dirname "$0")/backend"
 
+# Check if virtual environment exists, if not, create it
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
+
 # Source the virtual environment
 source venv/bin/activate
 
