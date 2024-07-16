@@ -13,10 +13,6 @@ sudo npm install -g create-react-app
 git clone https://github.com/alexander-labarge/crypt-transport.git
 cd crypt-transport
 
-# Set up Git configuration
-git config --global user.name "Alexander La Barge"
-git config --global user.email "alex@labarge.dev"
-
 # Set up virtual environment for the backend
 cd backend
 
@@ -37,6 +33,6 @@ pip install -r ../backend/requirements.txt
 
 # Navigate to the frontend and install npm packages
 cd ../frontend
-npm install axios formik yup react-router-dom
+npm install axios react formik create-react-app yup react-router-dom
 
 echo "Setup complete. You can now run ./run.sh to start the application."

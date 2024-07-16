@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Navigate to the backend directory
-cd "$(dirname "$0")/backend"
+cd ../crypt-transport/backend
 
 # Check if virtual environment exists, if not, create it
 if [ ! -d "venv" ]; then
@@ -16,7 +16,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 # Run the Flask application in the background
-FLASK_APP=fileupload.py flask run --port=5002 &
+FLASK_APP=fileupload.py flask run --port=5005 &
 
 # Navigate to the frontend directory
 cd ../frontend

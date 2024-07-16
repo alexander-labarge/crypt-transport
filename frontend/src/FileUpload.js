@@ -13,7 +13,7 @@ const FileUpload = () => {
   });
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5002/config')
+    axios.get('http://127.0.0.1:5005/config')
       .then(response => {
         formik.setValues(response.data);
       })
@@ -23,7 +23,7 @@ const FileUpload = () => {
   }, []);
 
   const generateAesKeys = (password, cipherMode) => {
-    axios.post('http://127.0.0.1:5002/generate_keys', { password, cipher_mode: cipherMode })
+    axios.post('http://127.0.0.1:5005/generate_keys', { password, cipher_mode: cipherMode })
       .then(response => {
         setAesGenerated({
           key: response.data.key,
@@ -77,7 +77,7 @@ const FileUpload = () => {
       }
       formData.append('file', values.file);
   
-      axios.post('http://127.0.0.1:5002/upload', formData, {
+      axios.post('http://127.0.0.1:5005/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
