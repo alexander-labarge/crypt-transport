@@ -181,5 +181,3 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 ```
-
-This README provides a comprehensive overview of the Crypt-Transport project, including installation instructions, running the server, API endpoints, and debugging information.
