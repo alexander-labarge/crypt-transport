@@ -1,12 +1,14 @@
 #!/bin/bash
 
 # Navigate to the backend directory
-cd ../crypt-transport/backend
+cd "$(dirname "$0")/backend"
 
-# Check if virtual environment exists, if not, create it
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
+# Check if virtual environment exists, destroy it, and recreate it
+if [ -d "venv" ]; then
+    rm -rf venv
 fi
+
+python3 -m venv venv
 
 # Source the virtual environment
 source venv/bin/activate
