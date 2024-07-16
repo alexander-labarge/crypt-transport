@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  background: url('images/ti.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 14px;
+}
+
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+h1, h3 {
+  color: #f8f9fa;
+  margin-top: 20px;
+}
+
+.form-control,
+.form-control-file {
+  border-radius: 0.25rem;
+}
+
+.form-group label {
+  color: #adb5bd;
+  text-align: left;
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-row {
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.form-control.fixed-size {
+  width: 100%;
+  max-width: 400px;
+  min-width: 48ch;
+  background-color: #343a40;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 10px;
+}
+
+.table {
+  width: 100%;
+}
+
+.table td {
+  border: none;
+  background-color: transparent;
+}
+
+.container {
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.file-upload-wrapper input[type="file"] {
+  display: none;
+}
+
+.file-upload-wrapper label {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  min-width: 48ch;
+  text-align: center;
+}
+
+.file-upload-wrapper label:hover {
+  background-color: #0056b3;
+}
+
+.file-upload-wrapper .file-name {
+  color: orange;
+  margin-top: 10px;
+}
+
+.file-upload-wrapper .text-danger {
+  margin-top: 10px;
+}
+
+.form-inner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.btn {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  min-width: 48ch;
+  text-align: center;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-red {
+  background-color: #FF0000;
+  color: #fff;
+}
+
+.btn-red:hover {
+  background-color: #CC0000;
+}
