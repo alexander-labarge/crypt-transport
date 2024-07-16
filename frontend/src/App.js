@@ -4,12 +4,14 @@ import './styles.css';
 
 function App() {
   return (
-    <div className="App">
-      <div className="container">
-        <h1 className="my-4">Crypt-Transport Secure Upload</h1>
-        <FileUpload />
+    <>
+      <div className="App">
+        <div className="container">
+          
+          <FileUpload />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
