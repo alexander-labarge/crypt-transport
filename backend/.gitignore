@@ -1,4 +1,4 @@
 # Python-specific
-/venv/
-/__pycache__/
+venv/
+__pycache__/
 *.py[cod]
