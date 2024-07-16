@@ -113,7 +113,7 @@ const FileUpload = () => {
           </p>
           </div>
         </div>
-        <form onSubmit={formik.handleSubmit} className='container my-4'>
+        <form onSubmit={formik.handleSubmit}>
         <div className="form-inner-wrapper">
           <div className="config-section">
             <h5>File to Transport</h5>

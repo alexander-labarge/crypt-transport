@@ -157,7 +157,7 @@ h1, h3, h4, h5 {
   padding: 20px;
   border-radius: 10px;
   margin-right: 10px;
-  width: 40%;
+  width: 100%;
   text-align: left;
   font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   border: 0px solid #020202;
@@ -222,7 +222,7 @@ h1, h3, h4, h5 {
   color: #fff;
   padding: 20px;
   border-radius: 10px;
-  width: 60%;
+  width: 100%;
   font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   border: 0px solid #020202;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
@@ -248,7 +248,6 @@ h1, h3, h4, h5 {
 }
 
 .btn-primary {
-  font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   background-color: rgba(0, 123, 255, 0.7);
   color: white;
   border: 1px solid #020202;
@@ -256,14 +255,12 @@ h1, h3, h4, h5 {
 }
 
 .btn-primary:hover {
-  font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   background-color: rgba(0, 86, 179, 0.7);
   border: 1px solid #020202;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
 .btn-red {
-  font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   background-color: rgba(255, 0, 0, 0.7);
   border: 1px solid #020202;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
@@ -271,7 +268,6 @@ h1, h3, h4, h5 {
 }
 
 .btn-red:hover {
-  font-family: 'San Francisco', 'Roboto', Arial, sans-serif;
   background-color: rgba(204, 0, 0, 0.7);
   border: 1px solid #020202;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
