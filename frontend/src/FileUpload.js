@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import axios from 'axios';
 import './styles.css';
 
@@ -24,44 +23,14 @@ const FileUpload = () => {
       clientKey: '',
       serverCert: '',
       serverKey: '',
-      serverBindIP: '',
-      fileInfoPort: '',
-      fileChunksPort: '',
-      uploadDir: '',
-      downloadDir: '',
-      compressionFormat: '',
-      cipherMode: 'aes-256-cbc', // Default value
       aesPassword: '',
+      cipherMode: 'aes-256-cbc',
       aesKey: '',
       aesIV: '',
       aesSalt: '',
       encryptedChunkSize: '',
       destinationPath: '',
     },
-    validationSchema: Yup.object({
-      file: Yup.mixed().required('A file is required'),
-      sshUsername: Yup.string().required('SSH Username is required'),
-      sshPassword: Yup.string().required('SSH Password is required'),
-      sshKey: Yup.string().required('SSH Key is required'),
-      sshPort: Yup.string().required('SSH Port is required'),
-      sshEndpoint: Yup.string().required('SSH Endpoint is required'),
-      clientCert: Yup.string().required('Client Certificate is required'),
-      clientKey: Yup.string().required('Client Private Key is required'),
-      serverCert: Yup.string().required('Server Certificate is required'),
-      serverKey: Yup.string().required('Server Private Key is required'),
-      serverBindIP: Yup.string().required('Server Bind IP is required'),
-      fileInfoPort: Yup.string().required('File Info Port is required'),
-      fileChunksPort: Yup.string().required('File Chunks Port is required'),
-      uploadDir: Yup.string().required('Upload Directory is required'),
-      downloadDir: Yup.string().required('Download Directory is required'),
-      compressionFormat: Yup.string().required('Compression Format is required'),
-      aesPassword: Yup.string().required('AES Password is required'),
-      aesKey: Yup.string().required('AES Key is required'),
-      aesIV: Yup.string().required('AES IV is required'),
-      aesSalt: Yup.string().required('AES Salt is required'),
-      encryptedChunkSize: Yup.string().required('Encrypted Chunk Size is required'),
-      destinationPath: Yup.string().required('Destination Path is required'),
-    }),
     onSubmit: (values) => {
       console.log('Submitting form with values:', values); // Debugging line
 
@@ -130,7 +99,6 @@ const FileUpload = () => {
           />
           <label htmlFor="file">Choose File</label>
           {fileName && <div className="file-name">{fileName}</div>}
-          {formik.errors.file && <div className="text-danger">{formik.errors.file}</div>}
         </div>
 
         <h3>SSH Configuration</h3>

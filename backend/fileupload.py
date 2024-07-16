@@ -8,13 +8,15 @@ import subprocess
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-UPLOAD_FOLDER = '../uploads'
-CONFIG_FOLDER = '../config'
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+CONFIG_FOLDER = os.path.join(BASE_DIR, 'config')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CONFIG_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CONFIG_FOLDER'] = CONFIG_FOLDER
 config_path = os.path.join(app.config['CONFIG_FOLDER'], 'config.json')
+print("Config path:", config_path)
 
 def read_config():
     try:
@@ -44,45 +46,59 @@ def save_file(file):
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    
-    if file:
-        file_path = save_file(file)
-        if not file_path:
-            return jsonify({'error': 'Failed to save file'}), 500
+    try:
+        print("Received POST request at /upload")  # Debugging line
+        if 'file' not in request.files:
+            print("No file part in the request")  # Debugging line
+            return jsonify({'error': 'No file part'}), 400
         
-        data = request.form.to_dict()
-        config = read_config()
-        config.update(data)
+        file = request.files['file']
+        if file.filename == '':
+            print("No selected file")  # Debugging line
+            return jsonify({'error': 'No selected file'}), 400
         
-        config_path = save_config(config)
-        if not config_path:
-            return jsonify({'error': 'Failed to save config file'}), 500
-        
-        return jsonify({'message': 'File uploaded and config saved successfully'}), 200
+        if file:
+            file_path = save_file(file)
+            if not file_path:
+                print("Failed to save file")  # Debugging line
+                return jsonify({'error': 'Failed to save file'}), 500
+            
+            data = request.form.to_dict()
+            print("Form data received:", data)  # Debugging line
+            config = read_config()
+            config.update(data)
+            
+            config_path = save_config(config)
+            if not config_path:
+                print("Failed to save config file")  # Debugging line
+                return jsonify({'error': 'Failed to save config file'}), 500
+            
+            print("File uploaded and config saved successfully")  # Debugging line
+            return jsonify({'message': 'File uploaded and config saved successfully'}), 200
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
 
 @app.route('/config', methods=['GET'])
 def get_config():
-    config = read_config()
-    return jsonify(config), 200
+    try:
+        config = read_config()
+        return jsonify(config), 200
+    except Exception as e:
+        print(f"Error reading config: {str(e)}")
+        return jsonify({'error': f'Error reading config: {str(e)}'}), 500
 
 @app.route('/generate_keys', methods=['POST'])
 def generate_keys():
-    password = request.json.get('password')
-    cipher_mode = request.json.get('cipher_mode')
-    if not password:
-        return jsonify({'error': 'Password is required to generate keys'}), 400
-    if not cipher_mode:
-        return jsonify({'error': 'Cipher mode is required'}), 400
-
     try:
+        password = request.json.get('password')
+        cipher_mode = request.json.get('cipher_mode')
+        if not password:
+            return jsonify({'error': 'Password is required to generate keys'}), 400
+        if not cipher_mode:
+            return jsonify({'error': 'Cipher mode is required'}), 400
+
         if cipher_mode == 'aes-256-xts':
-            # Generate a 512-bit key (64 bytes) for AES-256-XTS
             key_size = 64  # 512 bits
             result = subprocess.run(
                 ['openssl', 'rand', '-hex', str(key_size)],
@@ -102,18 +118,17 @@ def generate_keys():
             output = result.stdout.strip()
             response = {}
             for line in output.split('\n'):
-                # TODO - address the iv= openssl output issue for certain modes
                 key, value = line.split('=')
                 response[key.lower().strip()] = value.strip()
-
-            # Ensure that the response includes IV if it exists
             if 'iv' not in response:
                 response['iv'] = None
 
         return jsonify(response), 200
     except subprocess.CalledProcessError as e:
+        print(f"Subprocess error: {str(e)}")
         return jsonify({'error': str(e)}), 500
     except Exception as e:
+        print(f"Unexpected error: {str(e)}")
         return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
 
 if __name__ == '__main__':
